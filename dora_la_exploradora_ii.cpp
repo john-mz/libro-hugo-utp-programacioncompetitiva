@@ -5,17 +5,6 @@ signed long long int obtenerD (signed long long int x, signed long long int y){
     return x + y - 1;
 }
 
-signed long long int rangoMaximo(signed long long int d){
-    return ( d * (d + 1) ) / 2; //rango max inclusivo
-}
-
-signed long long int rangoMinimo(signed long long int d){
-    if (d > 1){
-        d -= 1;
-    }
-    return ( d * (d + 1) ) / 2; //rango min no inclusivo
-}
-
 bool diagonalPar(signed long long int d){
     if (d % 2 == 0){
         return true;
@@ -23,55 +12,38 @@ bool diagonalPar(signed long long int d){
     return false;
 }
 
-signed long long int diagonalDown(signed long long int d, signed long long int rangoMin, signed long long int objetivoX, signed long long int objetivoY){
-    // x = d, y = 1
-    signed long long int contador = rangoMin;
-    signed long long int x = d;
-    signed long long int y = 1;
-    while (x > 1) {
-        if (x == objetivoX && y == objetivoY){
-            return contador;
-        }
-        x -= 1;
-        y += 1;
-        contador++;
+long long n_min_no_inclusivo(long long d){
+    long long k = d - 1;
+    if (k % 2 == 0){
+        return ( k / 2 ) * (k + 1);
     }
-    return contador;
+    return k * ( (k + 1) /2 );
 }
-//mela
-signed long long int diagonalUp(signed long long int d, signed long long int rangoMin, signed long long int objetivoX, signed long long int objetivoY){
-    // x = 1, y = d
-    signed long long int contador = rangoMin;
-    signed long long int x = 1;
-    signed long long int y = d;
-    while (y > 1){
-        if (x == objetivoX && y == objetivoY){
-            return contador;
-        }
-        x += 1;
-        y -= 1;
-        contador++;
-    }
-    return contador;
+
+long long diferenciaPosiciones(long long x, long long x1){
+    return abs(x - x1);
 }
+
+long long obtenerN(long long n_min_no_inc, long long pasos_abs){
+    return n_min_no_inc + 1 + pasos_abs;
+}
+
 
 int main()
 {
     signed long long int x, y;
     while(cin >> x >> y && x > 0 && y > 0){
-        if (x == 1 && y == 1){
-            cout << 1 << "\n";
-            continue;
-        }
-        
         signed long long int d = obtenerD(x, y);
-        signed long long int rangoMax = rangoMaximo(d);
-        signed long long int rangoMin = rangoMinimo(d); // no inclusivo
-        if (diagonalPar(d)){
-            cout << diagonalUp(d, rangoMin + 1, x, y) << "\n";
+        long long x1;
+        long long y1;
+        if(diagonalPar(d)){
+            x1 = 1;
+            y1 = d;
         }else{
-            cout << diagonalDown(d, rangoMin + 1, x, y) << "\n";
+            x1 = d;
+            y1 = 1;
         }
+        cout << obtenerN(n_min_no_inclusivo(d), diferenciaPosiciones(x, x1)) << "\n";
     }
 
     return 0;
